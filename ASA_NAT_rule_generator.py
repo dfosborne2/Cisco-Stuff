@@ -1,31 +1,6 @@
 #!/usr/bin/env python
 # author: dfosborne2
 import netaddr
-import argparse
-
-
-parser = argparse.ArgumentParser(description='generate ASA nats for pre and post 8.4 ASA Code')
-
-
-parser.add_argument("-p", "--public", dest="public",
-                    metavar="1.1.1.0/24", help="CIDR range of PUBLIC addrs. ex: 1.1.1.0/24 or 1.1.1.3/32, etc")
-
-parser.add_argument("-P", "--private", dest="private",
-                    metavar="172.16.1.0/27", help="CIDR range of PRIVATE addrs to NAT to. ex: 172.16.1.0/27, 10.10.10.10/32, etc")
-
-parser.add_argument("-s" "--sequence", dest="sequence",
-                    metavar="5056", help="If this option is selected this will trigger build of pre 8.4 NATs, with this value being\
-                    next number in the sequence, NOT using this arg will result in 8.4+ rules being built")
-
-parser.add_argument("-o", "--outside", dest="outside_iface",
-                    metavar="outside_iface", help="name of the outside interface")
-
-parser.add_argument("-i", "--inside", dest="inside_iface",
-                    metavar="inside_iface", help="name of the inside interface")
-
-args = parser.parse_args()
-
-
 
 def buildConfig(sequence=None, public=None, private=None,
                 in_iface=None, out_iface=None):
@@ -86,6 +61,30 @@ def buildConfig(sequence=None, public=None, private=None,
 
 
 if __name__ == "__main__":
+    
+    import argparse
+    parser = argparse.ArgumentParser(description='generate ASA nats for pre and post 8.4 ASA Code')
+    
+    parser.add_argument("-p", "--public", dest="public",
+                    metavar="1.1.1.0/24", help="CIDR range of PUBLIC addrs. ex: 1.1.1.0/24 or 1.1.1.3/32, etc")
+                    
+    parser.add_argument("-P", "--private", dest="private",
+                    metavar="172.16.1.0/27", help="CIDR range of PRIVATE addrs to NAT to. ex: 172.16.1.0/27, 10.10.10.10/32, etc")
+                
+    parser.add_argument("-s" "--sequence", dest="sequence",
+                        metavar="5056", help="If this option is selected this will trigger build of pre 8.4 NATs, \
+                        with this value being \
+                        next number in the sequence, NOT using this arg will result in 8.4+ rules being built")
+                        
+    parser.add_argument("-o", "--outside", dest="outside_iface",
+                        metavar="outside_iface", help="name of the outside interface")
+                    
+    parser.add_argument("-i", "--inside", dest="inside_iface",
+                        metavar="inside_iface", help="name of the inside interface")
+                        
+    args = parser.parse_args()
+
+                    
     if args.sequence:
         buildConfig(sequence=int(args.sequence), public=args.public,
                     private=args.private, in_iface=args.inside_iface,
